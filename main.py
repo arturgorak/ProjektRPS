@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import math
 MT = []
 bbs = []
 index = 0
@@ -116,8 +117,6 @@ if __name__ == '__main__':
     bernoulli_distribution = []
     bernoulli_distribution.insert(0, 0)  # success
     bernoulli_distribution.insert(1, 0)  # defeat
-    # success = 0
-    # defeat = 0
 
     for x in random_numbers:
         if x <= N:
@@ -126,11 +125,54 @@ if __name__ == '__main__':
             bernoulli_distribution[1] += 1
 
     names = ['Sukcesy', 'Porażki']
-    #values = [success, defeat]
     plt.bar(names, bernoulli_distribution)
     plt.suptitle('Rozkład Bernoulliego')
     plt.show()
 
+    #Rozkład Poissona
+
+    lamb = 4
+    poisson_results = []
+    poisson_results_frequency = []
+    poisson_results_frequency_without_tail = []
+    poisson_count = []
+    max_result_freq = 0
+    poisson_n = 10000
+
+    for x in range(poisson_n):
+        poisson_results_frequency.insert(x, 0)
+
+    iterator = 0
+    pr_iterator = 0
+    for x in range(poisson_n):
+        if iterator == how_many_numbers:
+            break
+        U = random_numbers[iterator]
+        iterator += 1
+
+        X = 0
+
+        while U >= math.exp((-1) * lamb):
+            if iterator == how_many_numbers:
+                break
+
+            U = U * random_numbers[iterator]
+            iterator += 1
+            X += 1
+
+        poisson_results.insert(x, X)
+        poisson_results_frequency[X] += 1
+
+        if max_result_freq < X:
+            max_result_freq = X
+
+    for x in range(max_result_freq + int(max_result_freq/10)):  # delete a tail of zeros
+        poisson_count.insert(x, x)
+        poisson_results_frequency_without_tail.insert(x, poisson_results_frequency[x])
+
+    plt.bar(poisson_count, poisson_results_frequency_without_tail)
+    plt.suptitle('Rozkład Poissona')
+    plt.show()
 
 
 
