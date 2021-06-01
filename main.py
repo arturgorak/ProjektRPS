@@ -49,38 +49,43 @@ def blum_blum_shub(x0, q, p, n):
 
 
 if __name__ == '__main__':
-    seed = 15
 
-    initialize_generator(seed=seed)
+    #
+    # initialize_generator(seed=seed)
+    #
+    # random_numbers = []
+    # for x in range(how_many_numbers):
+    #     random_numbers.insert(x, (extract_numbers() % seed / seed))
+    #
+    # results = []
+    # for x in range(seed):
+    #     results.insert(x, 0)
+    #
+    # for x in random_numbers:
+    #     results[int(x*seed)] += 1
+    #
+    #
+    # maximum = 0
+    # for x in results:
+    #     if x > maximum:
+    #         maximum = x
+    #
+    # plt.title('Ilość występowania danych MT')
+    # plt.xlabel('Liczba')
+    # plt.ylabel('Ilość')
+    # plt.plot(count, results)
+    # plt.axis([0, seed, 0, maximum + maximum/10])
+    # plt.grid(True)
+    # plt.show()
 
-    results = []
-    for x in range(seed):
-        results.insert(x, 0)
+    #
+    seed = 1000
+    how_many_numbers = 1000000
+    blum_blum_shub(seed, 30000000091, 40000000003, n=how_many_numbers)
 
     count = []
     for x in range(0, seed):
         count.insert(x, x)
-
-    # for x in MT:
-    #     results[x % seed] += 1
-
-    for x in range(10000):
-        results[extract_numbers() % seed] += 1
-
-    maximum = 0
-    for x in results:
-        if x > maximum:
-            maximum = x
-
-    plt.title('Ilość występowania danych MT')
-    plt.xlabel('Liczba')
-    plt.ylabel('Ilość')
-    plt.plot(count, results)
-    plt.axis([0, seed, 0, maximum + maximum/10])
-    plt.grid(True)
-    plt.show()
-
-    blum_blum_shub(1234, 30000000091, 40000000003, 10000)
 
     results2 = []
     for x in range(seed):
@@ -101,3 +106,32 @@ if __name__ == '__main__':
     plt.axis([0, seed, 0, maximum2 + maximum2 / 10])
     plt.grid(True)
     plt.show()
+
+    random_numbers = []
+    for x in range(len(bbs)):
+        random_numbers.insert(x, (bbs[x] % seed)/seed)
+
+    #Rozkład Bernouliego
+    N = 0.3
+    bernoulli_distribution = []
+    bernoulli_distribution.insert(0, 0)  # success
+    bernoulli_distribution.insert(1, 0)  # defeat
+    # success = 0
+    # defeat = 0
+
+    for x in random_numbers:
+        if x <= N:
+            bernoulli_distribution[0] += 1
+        else:
+            bernoulli_distribution[1] += 1
+
+    names = ['Sukcesy', 'Porażki']
+    #values = [success, defeat]
+    plt.bar(names, bernoulli_distribution)
+    plt.suptitle('Rozkład Bernoulliego')
+    plt.show()
+
+
+
+
+
