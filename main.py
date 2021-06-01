@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import math
 MT = []
-bbs = []
 index = 0
 
 
@@ -41,12 +40,11 @@ def extract_numbers():
     return y
 
 
-def blum_blum_shub(x0, q, p, n):
-    global bbs
+def blum_blum_shub(x0, q, p, n, array):
     m = q*p
-    bbs.insert(0, x0)
+    array.insert(0, x0)
     for i in range(1, n):
-        bbs.insert(i, (bbs[i - 1] * bbs[i - 1]) % m)
+        array.insert(i, (array[i - 1] * array[i - 1]) % m)
 
 
 if __name__ == '__main__':
@@ -80,9 +78,10 @@ if __name__ == '__main__':
     # plt.show()
 
     #
+    bbs_array = []
     seed = 1000
     how_many_numbers = 1000000
-    blum_blum_shub(seed, 30000000091, 40000000003, n=how_many_numbers)
+    blum_blum_shub(seed, 30000000091, 40000000003, n=how_many_numbers, array=bbs_array)
 
     count = []
     for x in range(0, seed):
@@ -92,7 +91,7 @@ if __name__ == '__main__':
     for x in range(seed):
         results2.insert(x, 0)
 
-    for x in bbs:
+    for x in bbs_array:
         results2[x % seed] += 1
 
     maximum2 = 0
@@ -109,17 +108,17 @@ if __name__ == '__main__':
     plt.show()
 
     random_numbers = []
-    for x in range(len(bbs)):
-        random_numbers.insert(x, (bbs[x] % seed)/seed)
+    for x in range(len(bbs_array)):
+        random_numbers.insert(x, (bbs_array[x] % seed)/seed)
 
-    #Rozkład Bernouliego
-    N = 0.3
+    # Rozkład Bernouliego
+    p = 0.3
     bernoulli_distribution = []
     bernoulli_distribution.insert(0, 0)  # success
     bernoulli_distribution.insert(1, 0)  # defeat
 
     for x in random_numbers:
-        if x <= N:
+        if x <= p:
             bernoulli_distribution[0] += 1
         else:
             bernoulli_distribution[1] += 1
@@ -129,7 +128,53 @@ if __name__ == '__main__':
     plt.suptitle('Rozkład Bernoulliego')
     plt.show()
 
-    #Rozkład Poissona
+    # Rozkład geometryczny
+
+    p = 0.3
+    n = 1000
+    iterator = 0
+    geometric_results = []
+    geometric_results_frequency = []
+    max_geo_result_freq = 0
+
+    for x in range(how_many_numbers):
+        geometric_results_frequency.insert(x, 0)
+
+    for x in range(n):
+        X = 1
+
+        if iterator == how_many_numbers:
+            break
+        U = random_numbers[iterator]
+        iterator += 1
+
+        while U > p:
+            X += 1
+            if iterator == how_many_numbers:
+                break
+            U = random_numbers[iterator]
+            iterator += 1
+
+        geometric_results.insert(x, X)
+        geometric_results_frequency[X] += 1
+
+        if max_geo_result_freq < X:
+            max_geo_result_freq = X
+
+    geometric_results_frequency_without_tail = []
+    geometric_count = []
+
+    for x in range(max_geo_result_freq + int(max_geo_result_freq/10)):  # delete a tail of zeros
+        geometric_count.insert(x, x)
+        geometric_results_frequency_without_tail.insert(x, geometric_results_frequency[x])
+
+    plt.bar(geometric_count, geometric_results_frequency_without_tail)
+    plt.suptitle('Rozkład geometryczny')
+    plt.xlabel('Results')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Rozkład Poissona
 
     lamb = 4
     poisson_results = []
@@ -172,8 +217,6 @@ if __name__ == '__main__':
 
     plt.bar(poisson_count, poisson_results_frequency_without_tail)
     plt.suptitle('Rozkład Poissona')
+    plt.xlabel('Results')
+    plt.ylabel('Frequency')
     plt.show()
-
-
-
-
