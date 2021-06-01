@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import math
+import scipy.stats as stats
 MT = []
 index = 0
 
@@ -176,7 +177,7 @@ if __name__ == '__main__':
 
     # Rozkład Poissona
 
-    lamb = 4
+    lamb = 10
     poisson_results = []
     poisson_results_frequency = []
     poisson_results_frequency_without_tail = []
@@ -211,12 +212,40 @@ if __name__ == '__main__':
         if max_result_freq < X:
             max_result_freq = X
 
-    for x in range(max_result_freq + int(max_result_freq/10)):  # delete a tail of zeros
+    for x in range(max_result_freq):  # delete a tail of zeros
         poisson_count.insert(x, x)
-        poisson_results_frequency_without_tail.insert(x, poisson_results_frequency[x])
+        poisson_results_frequency_without_tail.insert(x, poisson_results_frequency[x]/poisson_n)
+
+    poisson_results_frequency_expected = []
+
+    for k in range(max_result_freq):
+        poisson_results_frequency_expected.insert(k, (math.pow(lamb, k) * math.exp((-1) * lamb))/math.factorial(k))
+
+    chi_kwadrat = 0
+    for i in range(max_geo_result_freq):
+        chi_kwadrat += (poisson_results_frequency_without_tail[i] - poisson_results_frequency_expected[i])**2/poisson_results_frequency_expected[i]
+
+    alfa = 0.05
+    p = 1  # only lambda
+    k = max_result_freq
+    df = k - p - 1
+
+    crit = stats.chi2.ppf(q=alfa, df=df)
+    if chi_kwadrat < crit:
+        print("Rozkład jest zgodny z rozkładem Poissona")
+    else:
+        print("Rozkład nie jest zgodny z rozkładem Poissona")
 
     plt.bar(poisson_count, poisson_results_frequency_without_tail)
     plt.suptitle('Rozkład Poissona')
     plt.xlabel('Results')
     plt.ylabel('Frequency')
     plt.show()
+
+    plt.bar(poisson_count, poisson_results_frequency_expected)
+    plt.suptitle('Rozkład Poissona spodziewany')
+    plt.xlabel('Results')
+    plt.ylabel('Frequency')
+    plt.show()
+
+
