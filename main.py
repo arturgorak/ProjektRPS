@@ -44,8 +44,8 @@ def extract_numbers():
 def blum_blum_shub(x0, q, p, n, array):
     m = q*p
     array.insert(0, x0)
-    for i in range(1, n):
-        array.insert(i, (array[i - 1] * array[i - 1]) % m)
+    for x in range(1, n):
+        array.insert(x, (array[x - 1] * array[x - 1]) % m)
 
 
 if __name__ == '__main__':
@@ -80,8 +80,9 @@ if __name__ == '__main__':
 
     #
     bbs_array = []
-    seed = 1000
-    how_many_numbers = 1000000
+    seed = 20753
+
+    how_many_numbers = 100000
     blum_blum_shub(seed, 30000000091, 40000000003, n=how_many_numbers, array=bbs_array)
 
     count = []
@@ -100,23 +101,27 @@ if __name__ == '__main__':
         if x > maximum2:
             maximum2 = x
 
-    plt.title('Ilość występowania danych bbs')
-    plt.xlabel('Liczba')
-    plt.ylabel('Ilość')
-    plt.plot(count, results2)
-    plt.axis([0, seed, 0, maximum2 + maximum2 / 10])
-    plt.grid(True)
-    plt.show()
+    # plt.title('Ilość występowania danych bbs')
+    # plt.xlabel('Liczba')
+    # plt.ylabel('Ilość')
+    # plt.plot(count, results2)
+    # plt.axis([0, seed, 0, maximum2 + maximum2 / 10])
+    # plt.grid(True)
+    # plt.show()
 
     random_numbers = []
     for x in range(len(bbs_array)):
-        random_numbers.insert(x, (bbs_array[x] % seed)/seed)
+        random_numbers.insert(x, (bbs_array[x] % 1000)/1000)
 
     # Rozkład Bernouliego
-    p = 0.3
+    p = 0.6
     bernoulli_distribution = []
     bernoulli_distribution.insert(0, 0)  # success
     bernoulli_distribution.insert(1, 0)  # defeat
+
+    bernoulli_distribution_expected = []
+    bernoulli_distribution_expected.insert(0, p*how_many_numbers)  # success
+    bernoulli_distribution_expected.insert(1, (1 - p) * how_many_numbers)  # defeat
 
     for x in random_numbers:
         if x <= p:
@@ -124,15 +129,36 @@ if __name__ == '__main__':
         else:
             bernoulli_distribution[1] += 1
 
-    names = ['Sukcesy', 'Porażki']
-    plt.bar(names, bernoulli_distribution)
-    plt.suptitle('Rozkład Bernoulliego')
-    plt.show()
+
+    # names = ['Sukcesy', 'Porażki']
+    # plt.bar(names, bernoulli_distribution)
+    # plt.suptitle('Rozkład Bernoulliego')
+    # plt.show()
+    #
+    # names = ['Sukcesy', 'Porażki']
+    # plt.bar(names, bernoulli_distribution_expected)
+    # plt.suptitle('Rozkład Bernoulliego spodziewany')
+    # plt.show()
+
+    chi_kwadrat = 0.
+    for i in range(2):
+        chi_kwadrat += (bernoulli_distribution[i] - bernoulli_distribution_expected[i]) ** 2 / bernoulli_distribution_expected[i]
+
+    alfa = 0.05
+    crit = stats.chi2.ppf(q=1-alfa, df=1)
+
+    print(chi_kwadrat)
+    print(crit)
+
+    if chi_kwadrat < crit:
+        print("Rozkład jest zgodny z rozkładem Bernoulliego")
+    else:
+        print("Rozkład nie jest zgodny z rozkładem Bernoulliego")
 
     # Rozkład geometryczny
 
     p = 0.3
-    n = 1000
+    n = 10000
     iterator = 0
     geometric_results = []
     geometric_results_frequency = []
@@ -165,25 +191,56 @@ if __name__ == '__main__':
     geometric_results_frequency_without_tail = []
     geometric_count = []
 
-    for x in range(max_geo_result_freq + int(max_geo_result_freq/10)):  # delete a tail of zeros
+    for x in range(max_geo_result_freq):  # delete a tail of zeros
         geometric_count.insert(x, x)
         geometric_results_frequency_without_tail.insert(x, geometric_results_frequency[x])
 
-    plt.bar(geometric_count, geometric_results_frequency_without_tail)
-    plt.suptitle('Rozkład geometryczny')
-    plt.xlabel('Results')
-    plt.ylabel('Frequency')
-    plt.show()
+    geometric_results_frequency_expected = []
+    geometric_results_frequency_expected.insert(0, 0)
+
+    for k in range(1, max_geo_result_freq):
+        geometric_results_frequency_expected.insert(k, (1 - p)**(k-1) * p * n)
+
+    stopnie = 0
+    chi_kwadrat = 0
+    for i in range(1, max_geo_result_freq):
+        if geometric_results_frequency_without_tail[i] > 10 and geometric_results_frequency_expected[i] > 10:
+            chi_kwadrat += (geometric_results_frequency_without_tail[i] - geometric_results_frequency_expected[i]) ** 2 /geometric_results_frequency_expected[i]
+            stopnie += 1
+
+
+    alfa = 0.05
+    crit = stats.chi2.ppf(q=(1 - alfa), df=stopnie)
+    print(crit)
+    print(chi_kwadrat)
+    print(str(max_geo_result_freq) + " " + str(stopnie))
+
+    if chi_kwadrat < crit:
+        print("Rozkład jest zgodny z rozkładem geometrycznym")
+    else:
+        print("Rozkład nie jest zgodny z rozkładem geometrycznym")
+
+    # plt.bar(geometric_count, geometric_results_frequency_without_tail)
+    # plt.suptitle('Rozkład geometryczny')
+    # plt.xlabel('Results')
+    # plt.ylabel('Frequency')
+    # plt.show()
+    #
+    # plt.bar(geometric_count, geometric_results_frequency_expected)
+    # plt.suptitle('Rozkład geometryczny spodziewany')
+    # plt.xlabel('Results')
+    # plt.ylabel('Frequency')
+    # plt.show()
 
     # Rozkład Poissona
 
-    lamb = 10
+    lamb = 4
     poisson_results = []
     poisson_results_frequency = []
     poisson_results_frequency_without_tail = []
     poisson_count = []
     max_result_freq = 0
-    poisson_n = 10000
+    poisson_n = 1000
 
     for x in range(poisson_n):
         poisson_results_frequency.insert(x, 0)
@@ -214,23 +271,28 @@ if __name__ == '__main__':
 
     for x in range(max_result_freq):  # delete a tail of zeros
         poisson_count.insert(x, x)
-        poisson_results_frequency_without_tail.insert(x, poisson_results_frequency[x]/poisson_n)
+        poisson_results_frequency_without_tail.insert(x, poisson_results_frequency[x])
 
     poisson_results_frequency_expected = []
 
     for k in range(max_result_freq):
-        poisson_results_frequency_expected.insert(k, (math.pow(lamb, k) * math.exp((-1) * lamb))/math.factorial(k))
+        poisson_results_frequency_expected.insert(k, (math.pow(lamb, k) * math.exp((-1) * lamb))/math.factorial(k)*poisson_n)
 
     chi_kwadrat = 0
-    for i in range(max_geo_result_freq):
-        chi_kwadrat += (poisson_results_frequency_without_tail[i] - poisson_results_frequency_expected[i])**2/poisson_results_frequency_expected[i]
+    stopnie = 0
+    for i in range(max_result_freq):
+        if poisson_results_frequency_without_tail[i] > 10 and poisson_results_frequency_expected[i] > 10:
+            chi_kwadrat += (poisson_results_frequency_without_tail[i] - poisson_results_frequency_expected[i])**2/poisson_results_frequency_expected[i]
+            stopnie += 1
 
     alfa = 0.05
     p = 1  # only lambda
     k = max_result_freq
     df = k - p - 1
 
-    crit = stats.chi2.ppf(q=alfa, df=df)
+    crit = stats.chi2.ppf(q=1-alfa, df=stopnie)
+    print(crit)
+    print(chi_kwadrat)
     if chi_kwadrat < crit:
         print("Rozkład jest zgodny z rozkładem Poissona")
     else:
@@ -248,4 +310,4 @@ if __name__ == '__main__':
     plt.ylabel('Frequency')
     plt.show()
 
-
+    # rozkład normalny
