@@ -24,13 +24,6 @@ if __name__ == '__main__':
     # mar.random_numbers(random_numbers, how_many_numbers, 1000)
 
 
-    # Rozkład Normalny
-    # norm = Normal(quantity=how_many_numbers, random_numbers=random_numbers, accuracy=0.1)
-    # norm.print()
-    # norm.chi_square()
-
-
-
     # Rozkład Bernouliego
     # p = 0.6
     # ber = Bernoulli(p=p, quantity=how_many_numbers, random_numbers=random_numbers)
@@ -60,4 +53,9 @@ if __name__ == '__main__':
     # expo = Exponential(lamb=lamb, n=n, accuracy=0.5, quantity=how_many_numbers, random_numbers=random_numbers)
     # expo.print()
     # expo.chi_square()
+
+    # Rozkład Normalny
+    # norm = Normal(quantity=how_many_numbers, random_numbers=random_numbers, accuracy=0.1)
+    # norm.print()
+    # norm.chi_square()
 
