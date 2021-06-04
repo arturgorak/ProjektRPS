@@ -42,7 +42,6 @@ class Exponential:
                     self.results_frequency[j - 1] += 1
                     break
 
-
     def print(self):
         plt.plot(self.count, self.results_frequency)
         plt.suptitle('Rozkład wykładniczy')
@@ -50,8 +49,6 @@ class Exponential:
         plt.ylabel('Frequency')
         plt.show()
         return 0
-
-
 
     def chi_square(self):
 
