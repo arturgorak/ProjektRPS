@@ -1,4 +1,5 @@
 from bernoulli import Bernoulli
+from binomial import Binomial
 from geometric import Geometric
 from poisson import Poisson
 from exponential import Exponential
@@ -30,8 +31,14 @@ if __name__ == '__main__':
     # ber.print()
     # ber.chi_square()
 
-    # Rozkład geometryczny
+    # Rozkład dwumianowy
+    # p = 0.11
+    # bino = Binomial(p=p, size=10, random_numbers=random_numbers)
+    # bino.print()
+    # bino.chi_square()
 
+
+    # Rozkład geometryczny
     # p = 0.3
     # n = 10000
     # geo = Geometric(p=p, n=n, quantity=how_many_numbers, random_numbers=random_numbers)
