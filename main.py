@@ -2,6 +2,7 @@ from bernoulli import Bernoulli
 from geometric import Geometric
 from poisson import Poisson
 from exponential import Exponential
+from normal import Normal
 from blum_blum_shub_generator import Bbs
 from marsenne_twister import  Marsenne
 import matplotlib.pyplot as plt
@@ -11,22 +12,30 @@ import scipy.stats as stats
 
 if __name__ == '__main__':
     seed = 3090176421
-    how_many_numbers = 1000000
+    how_many_numbers = 100000
     random_numbers = []
     bbs = Bbs(x0=seed, q=30000000091, p=40000000003, quantity=how_many_numbers)
-    bbs.generate_random_numbers(random_numbers, 1000)
-    bbs.print_frequency(1000)
+    bbs.generate_random_numbers(random_numbers, 10000)
+    # bbs.print_frequency(1000)
+    # bbs.runs_test()
 
-    tmp = []
-    mar = Marsenne(seed)
-    mar.random_numbers(tmp, how_many_numbers, 1000)
-    mar.print_frequency(1000)
+
+    # mar = Marsenne(seed)
+    # mar.random_numbers(random_numbers, how_many_numbers, 1000)
+
+
+    # Rozkład Normalny
+    # norm = Normal(quantity=how_many_numbers, random_numbers=random_numbers, accuracy=0.1)
+    # norm.print()
+    # norm.chi_square()
+
+
 
     # Rozkład Bernouliego
-    p = 0.6
-    ber = Bernoulli(p=p, quantity=how_many_numbers, random_numbers=random_numbers)
-    ber.print()
-    ber.chi_square()
+    # p = 0.6
+    # ber = Bernoulli(p=p, quantity=how_many_numbers, random_numbers=random_numbers)
+    # ber.print()
+    # ber.chi_square()
 
     # Rozkład geometryczny
 
@@ -35,7 +44,7 @@ if __name__ == '__main__':
     # geo = Geometric(p=p, n=n, quantity=how_many_numbers, random_numbers=random_numbers)
     # geo.print()
     # geo.chi_square()
-    #
+
     # Rozkład Poissona
     # lamb = 4
     # p = 0.3

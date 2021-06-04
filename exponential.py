@@ -33,11 +33,14 @@ class Exponential:
 
 
     def print(self):
-        plt.plot(self.count, self.results_frequency)
-        plt.suptitle('Rozkład wykładniczy')
-        plt.xlabel('Results')
-        plt.ylabel('Frequency')
-        plt.show()
+        # plt.plot(self.count, self.results_frequency)
+        # plt.suptitle('Rozkład wykładniczy')
+        # plt.xlabel('Results')
+        # plt.ylabel('Frequency')
+        # plt.show()
+        return 0
+
+
 
     def chi_square(self):
 
