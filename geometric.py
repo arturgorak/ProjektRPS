@@ -59,17 +59,17 @@ class Geometric:
         for k in range(1, self.max_result_freq):
             frequency_exp.insert(k, (1 - self.p) ** (k - 1) * self.p * self.n)
 
-        stopnie = 0
-        chi_kwadrat = 0
+        degrees = 0
+        chi = 0
         for i in range(1, self.max_result_freq):
-            if self.results_frequency_without_tail[i] > 10 and frequency_exp[i] > 10:
-                chi_kwadrat += (self.results_frequency_without_tail[i] - frequency_exp[i]) ** 2 / frequency_exp[i]
-                stopnie += 1
+            if self.results_frequency_without_tail[i] > 5 and frequency_exp[i] > 5:
+                chi += (self.results_frequency_without_tail[i] - frequency_exp[i]) ** 2 / frequency_exp[i]
+                degrees += 1
 
         alfa = 0.05
-        crit = stats.chi2.ppf(q=(1 - alfa), df=stopnie)
+        crit = stats.chi2.ppf(q=(1 - alfa), df=degrees - 1)
 
-        if chi_kwadrat < crit:
+        if chi < crit:
             print("Rozkład jest zgodny z rozkładem geometrycznym")
         else:
             print("Rozkład nie jest zgodny z rozkładem geometrycznym")

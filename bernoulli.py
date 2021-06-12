@@ -26,14 +26,15 @@ class Bernoulli:
         expected.insert(0, self.p * self.n)  # success
         expected.insert(1, (1 - self.p) * self.n)  # defeat
 
-        chi_square_value = 0
+        chi = 0
         for i in range(2):
-            chi_square_value += (self.distribution[i] - expected[i]) ** 2 / expected[i]
+            if self.distribution[i] > 5 and expected[i] > 5:
+                chi += (self.distribution[i] - expected[i]) ** 2 / expected[i]
 
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=1)
 
-        if chi_square_value < crit:
+        if chi < crit:
             print("Rozkład jest zgodny z rozkładem Bernoulliego")
         else:
             print("Rozkład nie jest zgodny z rozkładem Bernoulliego")

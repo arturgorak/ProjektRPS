@@ -4,10 +4,9 @@ import math
 
 
 class Poisson:
-    def __init__(self, lamb, p, n, quantity, random_numbers):
-        self.lamb = lamb
-        self.p = p
-        self.n = n
+    def __init__(self, lamb, n, quantity, random_numbers):
+        self.lamb = lamb  # oczekiwana liczba zdarzen
+        self.n = n  # liczba generacji w generatorze losowym
         self.quantity = quantity
         results = []
         results_frequency = []
@@ -54,22 +53,28 @@ class Poisson:
         plt.show()
 
     def chi_square(self):
-        results_frequency_expected = []
+        expected = []
         for k in range(self.max_result_freq):
-            results_frequency_expected.insert(k, (math.pow(self.lamb, k) * math.exp((-1) * self.lamb)) / math.factorial(k) * self.n)
+            expected.insert(k, (math.pow(self.lamb, k) * math.exp((-1) * self.lamb)) / math.factorial(k) * self.n)
 
-        chi_kwadrat = 0
-        stopnie = 0
-        for i in range(self.max_result_freq):
-            if self.results_frequency_without_tail[i] > 10 and results_frequency_expected[i] > 10:
-                chi_kwadrat += (self.results_frequency_without_tail[i] - results_frequency_expected[i]) ** 2 / results_frequency_expected[i]
-                stopnie += 1
+        plt.bar(self.count, expected)
+        plt.suptitle('Rozkład Poissona spodziewany')
+        plt.xlabel('Results')
+        plt.ylabel('Frequency')
+        plt.show()
+
+
+        chi = 0.
+        degrees = 0
+        for i in range(len(expected)):
+            if self.results_frequency_without_tail[i] > 5 and expected[i] > 5:
+                chi += ((self.results_frequency_without_tail[i] - expected[i]) ** 2) / expected[i]
+                degrees += 1
 
         alfa = 0.05
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees - 1)
 
-        crit = stats.chi2.ppf(q=1 - alfa, df=stopnie)
-
-        if chi_kwadrat < crit:
+        if chi < crit:
             print('Rozkład jest zgodny z rozkładem Poissona')
         else:
             print('Rozkład nie jest zgodny z rozkładem Poissona')

@@ -42,16 +42,16 @@ class Binomial:
         plt.suptitle('Rozkład Dwumianowy spodziewany')
         plt.show()
 
-        chi_kwadrat = 0
-        stopnie = 0
+        chi = 0
+        degrees = 0
         for i in range(self.size + 1):
-            if self.frequency[i] > 10 and expected[i] > 10:
-                chi_kwadrat += (self.frequency[i] - expected[i]) ** 2 / expected[i]
-                stopnie += 1
+            if self.frequency[i] > 5 and expected[i] > 5:
+                chi += (self.frequency[i] - expected[i]) ** 2 / expected[i]
+                degrees += 1
 
         alfa = 0.05
-        crit = stats.chi2.ppf(q=1 - alfa, df=stopnie)
-        if chi_kwadrat < crit:
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees - 1)
+        if chi < crit:
             print('Rozkład jest zgodny z rozkładem dwumianowym')
         else:
             print('Rozkład nie jest zgodny z rozkładem dwumianowym')

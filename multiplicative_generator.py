@@ -3,33 +3,46 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 
 
-class Bbs:
-    def __init__(self, x0, q, p, quantity):
-        self.x0 = x0
+class Multiplicative:
+    def __init__(self, seed, quantity):
         self.random_numbers = []
-        m = q * p
-        self.random_numbers.insert(0, x0)
-        for x in range(1, quantity):
-            self.random_numbers.insert(x, (self.random_numbers[x - 1] * self.random_numbers[x - 1]) % m)
 
-        # f = open("results.txt", "a")
+        # # dane dla wersji Numerical Recipes
+        # a = 1664525
+        # m = 2**32
+        # c = 1013904223
 
+        # # dane dla wersji APPLE
+        # a = 1220703125
+        # m = 2 ** 35
+        # c = 0
+
+        # dane dla wersji Microsoft Visual
+        a = 214013
+        m = 2 ** 32
+        c = 2531011
+
+        n = seed
+
+        # f = open("results_mg.txt", "a")
+        #
         # f.write('#==================================================================\n')
         # f.write('# generator mt19937  seed = 3090176421\n')
         # f.write('#==================================================================\n')
         # f.write('type: d\n')
         # f.write('count: 1000000000\n')
         # f.write('numbit: 10\n')
-        # print("yo")
         #
-        # tmp = x0
-        # f.write(str(tmp % 1000) + '\n')
+        # f.write(str(n % 1000) + '\n')
         # for x in range(1, quantity):
-        #     tmp = ((tmp * tmp) % m)
-        #     # self.random_numbers.insert(x, (self.random_numbers[x - 1] * self.random_numbers[x - 1]) % m)
-        #     f.write(str(tmp % 1000) + "\n")
+        #     n = (a * n + c) % m
+        #     f.write(str(n % 1000) + '\n')
         #
         # f.close()
+
+        self.random_numbers.insert(0, seed)
+        for x in range(1, quantity):
+            self.random_numbers.insert(x, (a * self.random_numbers[x - 1] + c) % m)
 
     def generate_random_numbers(self, array, accuracy):
         for x in range(len(self.random_numbers)):
@@ -50,7 +63,7 @@ class Bbs:
             if x > maximum:
                 maximum = x
 
-        plt.title('Ilość występowania danych w generatorze Blum Blum Shub')
+        plt.title('Ilość występowania danych w generatorze multiplikatywnym')
         plt.xlabel('Liczba')
         plt.ylabel('Ilość')
         plt.plot(count, frequency)
@@ -60,7 +73,7 @@ class Bbs:
     def chi_square(self, array):
         expected = []
         actual = []
-        n = 7
+        n = 6
         for x in range(n):
             expected.insert(x, int(len(array)/n))
             actual.insert(x, 0)
@@ -76,25 +89,22 @@ class Bbs:
                 actual[3] += 1
             elif x < 5/n:
                 actual[4] += 1
-            elif x < 6/n:
-                actual[5] += 1
             else:
-                actual[6] += 1
+                actual[5] += 1
 
-        chi_kwadrat = 0
-        iterator = 0
+        chi = 0
+        degrees = 0
         for x in range(n):
             if actual[x] > 5 and expected[x] > 5:
-                chi_kwadrat += (actual[x] - expected[x]) ** 2 / expected[x]
-                iterator += 1
+                chi += (actual[x] - expected[x]) ** 2 / expected[x]
+                degrees += 1
 
         alfa = 0.05
-        crit = stats.chi2.ppf(q=1 - alfa, df=iterator-1)
-        if chi_kwadrat < crit:
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
+        if chi < crit:
             print("Rozkład jest zgodny z rozkładem jednostajnym")
         else:
             print("Rozkład nie jest zgodny z rozkładem jednostajnym")
-
 
     def runs_test(self):
         tmp = []
@@ -163,5 +173,3 @@ class Bbs:
             print("Odrzucany hipotezę zerową, czli postulat losowości próbki")
         else:
             print("Nie możemy odrzucić hipotezy zerowej, czli postulatu losowości próbki")
-
-

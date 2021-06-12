@@ -50,10 +50,10 @@ class Normal:
         self.y.sort()
 
         minimum = round(self.x[0])
-        maksimum = (-1) * minimum
+        self.maksimum = (-1) * minimum
         iterator = 0
         i = minimum
-        while i <= maksimum:
+        while i <= self.maksimum:
             self.count.insert(iterator, i)
             i += accuracy
             iterator += 1
@@ -94,44 +94,68 @@ class Normal:
 
     def chi_square(self):
         expected = []
+        compartments = []
+        realx = []
+        realy = []
+        width_comp = 2 * self.maksimum / 6
+
         iterator = 0
-        for x in self.count:
-            I = quad(integrand, x, x + self.accuracy)
+        i = (-1) * self.maksimum
+        while i <= self.maksimum:
+            compartments.insert(iterator, i)
+            i += width_comp
+            iterator += 1
+
+        for x in range(iterator):
+            realx.insert(x, 0)
+            realy.insert(x, 0)
+
+        for x in self.x:
+            for j in range(iterator):
+                if x < compartments[j]:
+                    realx[j - 1] += 1
+                    break
+
+        for x in self.y:
+            for j in range(iterator):
+                if x < compartments[j]:
+                    realy[j - 1] += 1
+                    break
+
+        for x in compartments:
+            I = quad(integrand, x, x + width_comp)
             expected.insert(iterator, I[0] * self.n/2)
             iterator += 1
 
         chi = 0
-        iterator = 0
+        degrees = 0
         for x in range(len(expected)):
-            if expected[x] > 10 and self.frequency_x[x] > 10:
-                chi += (self.frequency_x[x] - expected[x]) ** 2 / expected[x]
-                iterator += 1
+            if expected[x] > 5 and realx[x] > 5:
+                chi += (realx[x] - expected[x]) ** 2 / expected[x]
+                degrees += 1
 
-        alfa = 0.5
-        crit = stats.chi2.ppf(q=1 - alfa, df=iterator)
-        print(str(chi) + " " + str(crit))
+        alfa = 0.05
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
         if chi < crit:
             print("Rozkład X jest zgodny z rozkładem naturalnym")
         else:
             print("Rozkład X nie jest zgodny z rozkładem naturalnym")
 
         chi = 0
-        iterator = 0
+        degrees = 0
         for x in range(len(expected)):
-            if expected[x] > 10 and self.frequency_y[x] > 10:
-                chi += (self.frequency_y[x] - expected[x]) ** 2 / expected[x]
-                iterator += 1
+            if expected[x] > 5 and realy[x] > 5:
+                chi += (realy[x] - expected[x]) ** 2 / expected[x]
+                degrees += 1
 
-
-        crit = stats.chi2.ppf(q=1 - alfa, df=iterator)
-        print(str(chi) + " " + str(crit))
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
         if chi < crit:
-            print("Rozkład Y jest zgodny z rozkładem naturalnym")
+            print("Rozkład Y jest zgodny z rozkładem normalnym")
         else:
-            print("Rozkład Y nie jest zgodny z rozkładem naturalnym")
+            print("Rozkład Y nie jest zgodny z rozkładem normalnym")
 
-        plt.plot(self.count, expected)
-        plt.suptitle('Rozkład Normalny spodziewany')
-        plt.xlabel('Results')
-        plt.ylabel('Frequency')
-        plt.show()
+        # plt.plot(compartments, expected)
+        # plt.suptitle('Rozkład Normalny spodziewany z uwzględnieniem przedziałów')
+        # plt.xlabel('Results')
+        # plt.ylabel('Frequency')
+        # plt.show()
