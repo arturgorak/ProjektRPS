@@ -16,9 +16,9 @@ class Bernoulli:
                 self.distribution[1] += 1
 
     def print(self):
-        names = ['Sukcesy', 'Porażki']
+        names = ['Successes', 'Failures']
         plt.bar(names, self.distribution)
-        plt.suptitle('Rozkład Bernoulliego')
+        plt.suptitle('Bernoulli distribution')
         plt.show()
 
     def chi_square(self):
@@ -35,11 +35,11 @@ class Bernoulli:
         crit = stats.chi2.ppf(q=1 - alfa, df=1)
 
         if chi < crit:
-            print("Rozkład jest zgodny z rozkładem Bernoulliego")
+            print("The distribution is consistent with the Bernoulli distribution ")
         else:
-            print("Rozkład nie jest zgodny z rozkładem Bernoulliego")
+            print("The distribution is not consistent with the Bernoulli distribution ")
 
-        # names = ['Sukcesy', 'Porażki']
-        # plt.bar(names, expected)
-        # plt.suptitle('Rozkład Bernoulliego spodziewany')
-        # plt.show()
+        names = ['Successes', 'Failures']
+        plt.bar(names, expected)
+        plt.suptitle('expected Bernoulli distribution')
+        plt.show()

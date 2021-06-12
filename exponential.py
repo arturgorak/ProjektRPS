@@ -44,7 +44,7 @@ class Exponential:
 
     def print(self):
         plt.plot(self.count, self.results_frequency)
-        plt.suptitle('Rozkład wykładniczy')
+        plt.suptitle('Exponential distribution ')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
@@ -77,11 +77,11 @@ class Exponential:
 
         expected.insert(tmp - 1, 0)
 
-        # plt.plot(compartments, expected)
-        # plt.suptitle('Rozkład wykładniczy spodziewany')
-        # plt.xlabel('Results')
-        # plt.ylabel('Frequency')
-        # plt.show()
+        plt.plot(compartments, expected)
+        plt.suptitle('expected exponential distribution')
+        plt.xlabel('Results')
+        plt.ylabel('Frequency')
+        plt.show()
 
         chi = 0
         degrees = 0
@@ -93,6 +93,6 @@ class Exponential:
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees - 1)
         if chi < crit:
-            print("Rozkład jest zgodny z rozkładem wykładniczym")
+            print("The distribution is consistent with the exponential distribution ")
         else:
-            print("Rozkład nie jest zgodny z rozkładem wykładniczym")
+            print("The distribution is not consistent with the exponential distribution ")

@@ -7,22 +7,26 @@ class Multiplicative:
     def __init__(self, seed, quantity):
         self.random_numbers = []
 
-        # # dane dla wersji Numerical Recipes
-        # a = 1664525
-        # m = 2**32
-        # c = 1013904223
+        # dane dla wersji Numerical Recipes
+        a = 1664525
+        m = 2**32
+        c = 1013904223
 
         # # dane dla wersji APPLE
         # a = 1220703125
         # m = 2 ** 35
         # c = 0
 
-        # dane dla wersji Microsoft Visual
-        a = 214013
-        m = 2 ** 32
-        c = 2531011
+        # # dane dla wersji Microsoft Visual
+        # a = 214013
+        # m = 2 ** 32
+        # c = 2531011
 
         n = seed
+
+        self.random_numbers.insert(0, seed)
+        for x in range(1, quantity):
+            self.random_numbers.insert(x, (a * self.random_numbers[x - 1] + c) % m)
 
         # f = open("results_mg.txt", "a")
         #
@@ -40,9 +44,6 @@ class Multiplicative:
         #
         # f.close()
 
-        self.random_numbers.insert(0, seed)
-        for x in range(1, quantity):
-            self.random_numbers.insert(x, (a * self.random_numbers[x - 1] + c) % m)
 
     def generate_random_numbers(self, array, accuracy):
         for x in range(len(self.random_numbers)):
@@ -63,9 +64,9 @@ class Multiplicative:
             if x > maximum:
                 maximum = x
 
-        plt.title('Ilość występowania danych w generatorze multiplikatywnym')
-        plt.xlabel('Liczba')
-        plt.ylabel('Ilość')
+        plt.title('Amount of data present in multiplicative generator')
+        plt.xlabel('Numbers')
+        plt.ylabel('Quantity')
         plt.plot(count, frequency)
         plt.axis([0, limit, 0, maximum + maximum / 10])
         plt.show()
@@ -102,9 +103,9 @@ class Multiplicative:
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
         if chi < crit:
-            print("Rozkład jest zgodny z rozkładem jednostajnym")
+            print("The distribution is consistent with the uniform distribution")
         else:
-            print("Rozkład nie jest zgodny z rozkładem jednostajnym")
+            print("The distribution is not consistent with the uniform distribution")
 
     def runs_test(self):
         tmp = []
@@ -170,6 +171,6 @@ class Multiplicative:
         # print('One tailed P value: %s; Two tailed P value: %s ' % (p_values_one, p_values_two))
 
         if abs(z) > z_for_005:
-            print("Odrzucany hipotezę zerową, czli postulat losowości próbki")
+            print("We reject the null hypothesis, i.e. the postulate of sample randomness")
         else:
-            print("Nie możemy odrzucić hipotezy zerowej, czli postulatu losowości próbki")
+            print("We cannot reject the null hypothesis, i.e. the randomness of the sample")

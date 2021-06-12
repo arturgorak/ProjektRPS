@@ -76,17 +76,17 @@ class Normal:
 
     def print(self):
         # plt.scatter(x=self.x, y=self.y, s=0.0001, marker='o', c='r', edgecolors='purple')
-        # plt.suptitle('Rozkład Normalny')
+        # plt.suptitle('Normal distribution')
         # plt.show()
 
         plt.plot(self.count, self.frequency_x)
-        plt.suptitle('Rozkład Normalny wedle osi X')
+        plt.suptitle('Normal distribution along the X axis')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
 
         plt.plot(self.count, self.frequency_y)
-        plt.suptitle('Rozkład Normalny wedle osi Y')
+        plt.suptitle('Normal distribution along the Y axis')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
@@ -137,9 +137,9 @@ class Normal:
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
         if chi < crit:
-            print("Rozkład X jest zgodny z rozkładem naturalnym")
+            print("The X distribution is consistent with the natural distribution ")
         else:
-            print("Rozkład X nie jest zgodny z rozkładem naturalnym")
+            print("The X distribution is not consistent with the natural distribution ")
 
         chi = 0
         degrees = 0
@@ -150,12 +150,12 @@ class Normal:
 
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
         if chi < crit:
-            print("Rozkład Y jest zgodny z rozkładem normalnym")
+            print("The Y distribution is consistent with the natural distribution ")
         else:
-            print("Rozkład Y nie jest zgodny z rozkładem normalnym")
+            print("The Y distribution is not consistent with the natural distribution ")
 
-        # plt.plot(compartments, expected)
-        # plt.suptitle('Rozkład Normalny spodziewany z uwzględnieniem przedziałów')
-        # plt.xlabel('Results')
-        # plt.ylabel('Frequency')
-        # plt.show()
+        plt.plot(compartments, expected)
+        plt.suptitle('Normal distribution expected with regard to ranges')
+        plt.xlabel('Results')
+        plt.ylabel('Frequency')
+        plt.show()

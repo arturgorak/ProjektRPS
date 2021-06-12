@@ -50,9 +50,9 @@ class Bbs:
             if x > maximum:
                 maximum = x
 
-        plt.title('Ilość występowania danych w generatorze Blum Blum Shub')
-        plt.xlabel('Liczba')
-        plt.ylabel('Ilość')
+        plt.title('Amount of data present in Blum Blum Shub generator')
+        plt.xlabel('Numbers')
+        plt.ylabel('Quantity')
         plt.plot(count, frequency)
         plt.axis([0, limit, 0, maximum + maximum / 10])
         plt.show()
@@ -81,19 +81,19 @@ class Bbs:
             else:
                 actual[6] += 1
 
-        chi_kwadrat = 0
-        iterator = 0
+        chi = 0
+        degrees = 0
         for x in range(n):
             if actual[x] > 5 and expected[x] > 5:
-                chi_kwadrat += (actual[x] - expected[x]) ** 2 / expected[x]
-                iterator += 1
+                chi += (actual[x] - expected[x]) ** 2 / expected[x]
+                degrees += 1
 
         alfa = 0.05
-        crit = stats.chi2.ppf(q=1 - alfa, df=iterator-1)
-        if chi_kwadrat < crit:
-            print("Rozkład jest zgodny z rozkładem jednostajnym")
+        crit = stats.chi2.ppf(q=1 - alfa, df=degrees-1)
+        if chi < crit:
+            print("The distribution is consistent with the uniform distribution ")
         else:
-            print("Rozkład nie jest zgodny z rozkładem jednostajnym")
+            print("The distribution is not consistent with the uniform distribution ")
 
 
     def runs_test(self):
@@ -153,15 +153,10 @@ class Bbs:
         # p_values_one = stats.norm.sf(abs(z))  # one-sided
         # p_values_two = stats.norm.sf(abs(z)) * 2  # twosided
         #
-        # print('Runs Test')
-        # print('Number of runs: ' + str(runs))
-        # print('Number of a\'s: %s; Number of b\'s: %s ' % (a_freq, b_freq))
-        # print('Z value: ' + str(z))
-        # print('One tailed P value: %s; Two tailed P value: %s ' % (p_values_one, p_values_two))
 
         if abs(z) > z_for_005:
-            print("Odrzucany hipotezę zerową, czli postulat losowości próbki")
+            print("We reject the null hypothesis, i.e. the postulate of sample randomness")
         else:
-            print("Nie możemy odrzucić hipotezy zerowej, czli postulatu losowości próbki")
+            print("We cannot reject the null hypothesis, i.e. the randomness of the sample")
 
 

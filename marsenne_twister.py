@@ -61,9 +61,9 @@ class Marsenne:
             if x > maximum:
                 maximum = x
 
-        plt.title('Ilość występowania danych w generatorze Marsenne Twister')
-        plt.xlabel('Liczba')
-        plt.ylabel('Ilość')
+        plt.title('Amount of data present in Marsenne Twister generator')
+        plt.xlabel('Numbers')
+        plt.ylabel('Quantity')
         plt.plot(count, frequency)
         plt.axis([0, limit, 0, maximum + maximum / 10])
         plt.show()
@@ -100,9 +100,9 @@ class Marsenne:
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=iterator-1)
         if chi < crit:
-            print("Rozkład jest zgodny z rozkładem jednostajnym")
+            print("The distribution is consistent with the uniform distribution")
         else:
-            print("Rozkład nie jest zgodny z rozkładem jednostajnym")
+            print("The distribution is not consistent with the uniform distribution")
 
     def runs_test(self, random_numbers):
         tmp = []
@@ -168,6 +168,6 @@ class Marsenne:
         # print('One tailed P value: %s; Two tailed P value: %s ' % (p_values_one, p_values_two))
 
         if abs(z) > z_for_005:
-            print("Odrzucany hipotezę zerową, czli postulat losowości próbki")
+            print("We reject the null hypothesis, i.e. the postulate of sample randomness")
         else:
-            print("Nie możemy odrzucić hipotezy zerowej, czli postulatu losowości próbki")
+            print("We cannot reject the null hypothesis, i.e. the randomness of the sample")

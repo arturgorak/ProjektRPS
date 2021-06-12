@@ -30,7 +30,7 @@ class Binomial:
 
     def print(self):
         plt.bar(self.count, self.frequency)
-        plt.suptitle('Rozkład Dwumianowy')
+        plt.suptitle('Binomial distribution ')
         plt.show()
 
     def chi_square(self):
@@ -39,7 +39,7 @@ class Binomial:
             expected.insert(x, (math.factorial(self.size)/(math.factorial(self.size - x) * math.factorial(x)) * math.pow(self.p, x) * math.pow(1 - self.p, self.size - x))*(self.rn_size / self.size))
 
         plt.bar(self.count, expected)
-        plt.suptitle('Rozkład Dwumianowy spodziewany')
+        plt.suptitle('Expected binomial distribution ')
         plt.show()
 
         chi = 0
@@ -52,6 +52,6 @@ class Binomial:
         alfa = 0.05
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees - 1)
         if chi < crit:
-            print('Rozkład jest zgodny z rozkładem dwumianowym')
+            print('The distribution is consistent with the binomial distribution')
         else:
-            print('Rozkład nie jest zgodny z rozkładem dwumianowym')
+            print('The distribution is not consistent with the binomial distribution')

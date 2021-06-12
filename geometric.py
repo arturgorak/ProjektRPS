@@ -46,7 +46,7 @@ class Geometric:
 
     def print(self):
         plt.bar(self.count, self.results_frequency_without_tail)
-        plt.suptitle('Rozkład geometryczny')
+        plt.suptitle('Geometric distribution')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
@@ -70,12 +70,12 @@ class Geometric:
         crit = stats.chi2.ppf(q=(1 - alfa), df=degrees - 1)
 
         if chi < crit:
-            print("Rozkład jest zgodny z rozkładem geometrycznym")
+            print("The distribution is consistent with the geometric distribution ")
         else:
-            print("Rozkład nie jest zgodny z rozkładem geometrycznym")
+            print("The distribution is not consistent with the geometric distribution ")
 
-        # plt.bar(self.count, frequency_exp)
-        # plt.suptitle('Rozkład geometryczny spodziewany')
-        # plt.xlabel('Results')
-        # plt.ylabel('Frequency')
-        # plt.show()
+        plt.bar(self.count, frequency_exp)
+        plt.suptitle('expected Geometric distribution')
+        plt.xlabel('Results')
+        plt.ylabel('Frequency')
+        plt.show()

@@ -47,7 +47,7 @@ class Poisson:
 
     def print(self):
         plt.bar(self.count, self.results_frequency_without_tail)
-        plt.suptitle('Rozkład Poissona')
+        plt.suptitle('Poisson distribution ')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
@@ -58,7 +58,7 @@ class Poisson:
             expected.insert(k, (math.pow(self.lamb, k) * math.exp((-1) * self.lamb)) / math.factorial(k) * self.n)
 
         plt.bar(self.count, expected)
-        plt.suptitle('Rozkład Poissona spodziewany')
+        plt.suptitle('expected Poisson distribution ')
         plt.xlabel('Results')
         plt.ylabel('Frequency')
         plt.show()
@@ -75,6 +75,6 @@ class Poisson:
         crit = stats.chi2.ppf(q=1 - alfa, df=degrees - 1)
 
         if chi < crit:
-            print('Rozkład jest zgodny z rozkładem Poissona')
+            print('The distribution is consistent with the Poisson distribution ')
         else:
-            print('Rozkład nie jest zgodny z rozkładem Poissona')
+            print('The distribution is not consistent with the Poisson distribution ')
